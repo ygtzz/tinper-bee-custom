@@ -1,0 +1,33 @@
+{
+  "name": "tinper-bee-custom",
+  "version": "1.0.0",
+  "description": "a tool to custom tinper-bee components",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ygtzz/tinper-bee-custom.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ygtzz/tinper-bee-custom/issues"
+  },
+  "homepage": "https://github.com/ygtzz/tinper-bee-custom#readme",
+  "dependencies": {
+    "ignore": "^5.0.2",
+    "isomorphic-git": "^0.37.0",
+    "koa": "^2.5.3",
+    "koa-bodyparser": "^4.2.1",
+    "koa-nunjucks-2": "^3.0.2",
+    "koa-router": "^7.4.0",
+    "wcwidth": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodeman": "^1.1.2",
+    "nodemon": "^1.18.4"
+  }
+}
