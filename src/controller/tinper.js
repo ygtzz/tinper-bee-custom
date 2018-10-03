@@ -17,14 +17,19 @@ module.exports = {
             'Timeline','Transfer','BackTop','Collapse','Slider','Autocomplete','LoadingState','Locale','Popover'
         ];
 
-        await git.clone({
-            dir: './downloads',
-            url: 'https://github.com/iuap-design/tinper-bee.git',
-            singleBranch: true,
-            depath: 1 
-        })
+        await ctx.render('custom',{coms:coms});
+    },
+    async download(ctx){
+        console.log(ctx.query.coms);
 
-        await ctx.render('tinper-bee-custom',{coms:coms});
+        // await git.clone({
+        //     dir: './downloads',
+        //     url: 'https://github.com/iuap-design/tinper-bee.git',
+        //     singleBranch: true,
+        //     depath: 1 
+        // })
+
+        await ctx.render('download');
     }
 }
 

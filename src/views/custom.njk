@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{title}}</title>
+    <style>
+        ul,li{margin:0;padding:0;}
+        ul{list-style:none;}
+        .con{text-align: center;}
+        .coms{overflow:hidden;text-align:left;}
+        .com-item{display:inline-block;width:150px;}
+        .btn-wrap{margin-top:50px;text-align:center;}
+        .btn-submit{display:inline-block;font-size:24px;width:250px;height:50px;text-align:center;line-height:50px;background-color:lightblue;border-radius:4px;color:#fff;}
+        .btn-submit:link,.btn-submit:visited,.btn-submit:hover,.btn-submit:active{text-decoration:none;color:#fff;}
+    </style>
+</head>
+<body>
+    <div class="con">
+        <h2 class="title">tinper-bee custom</h2>
+        <ul class="coms">
+            {% for item in coms %}
+                <li class="com-item">
+                    <label>
+                        <input class="com-cbk" type="checkbox" value="{{item}}" />
+                        <span>{{item}}</span>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="btn-wrap">
+            <a id="btnSubmit" href="/tinper/download" target="_blank" class="btn-submit">提交</a>
+        </div>
+    </div>
+    <script src="/lib/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function(){
+            var $btnSubmit = $('#btnSubmit');
+            var downloadHref = $btnSubmit.attr('href');
+            var aHref = [];
+            //checkbox注册事件
+            $('.coms').on('change','.com-cbk',function(){
+                var cbk = this;
+                if(cbk.checked){
+                    aHref.push(cbk.value);
+                }
+                else{
+                    aHref = aHref.filter(function(item){
+                        return item != cbk.value;
+                    });
+                }
+                var href = aHref.length ? downloadHref + '?coms=' + aHref.join(',') : downloadHref;
+                $btnSubmit.attr('href',href);
+            });
+        });
+    </script>
+</body>
+</html>
