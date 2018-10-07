@@ -14,6 +14,13 @@
         .btn-wrap{margin-top:50px;text-align:center;}
         .btn-submit{display:inline-block;font-size:24px;width:250px;height:50px;text-align:center;line-height:50px;background-color:lightblue;border-radius:4px;color:#fff;}
         .btn-submit:link,.btn-submit:visited,.btn-submit:hover,.btn-submit:active{text-decoration:none;color:#fff;}
+        .version-wrap{
+            margin-top:50px;
+        }
+        .sel-version{
+            width: 150px;
+            height: 30px;
+        }
     </style>
 </head>
 <body>
@@ -29,6 +36,13 @@
                 </li>
             {% endfor %}
         </ul>
+        <div class="version-wrap">
+            <select name="selVersion" id="selVersion" class="sel-version">
+                <option value="1.5.2">1.5.2</option>
+                <option value="1.5.1">1.5.1</option>
+                <option value="1.5.0">1.5.0</option>
+            </select>
+        </div>
         <div class="btn-wrap">
             <a id="btnSubmit" href="/tinper/download" target="_blank" class="btn-submit">提交</a>
         </div>
@@ -50,9 +64,18 @@
                         return item != cbk.value;
                     });
                 }
-                var href = aHref.length ? downloadHref + '?coms=' + aHref.join(',') : downloadHref;
-                $btnSubmit.attr('href',href);
+                setHref();
             });
+            //sel注册事件
+            $('#selVersion').on('change',function(){
+                setHref();
+            });
+
+            function setHref(){
+                var versionHref = downloadHref + '?version=' + $('#selVersion').val();
+                var href = aHref.length ? versionHref + '&coms=' + aHref.join(',') : versionHref;
+                $btnSubmit.attr('href',href);
+            }
         });
     </script>
 </body>
