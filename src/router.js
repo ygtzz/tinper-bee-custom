@@ -7,6 +7,7 @@ const tinper = require('./controller/tinper');
 // router.get('/user/profile',user.profile);
 router.get('/tinper/custom',tinper.custom);
 router.get('/tinper/download',tinper.download);
+router.get('/tinper/build',tinper.build);
 
 module.exports = router;
 

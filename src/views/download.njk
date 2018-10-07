@@ -6,13 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>download</title>
     <style>
-        ul,li{margin:0;padding:0;}
-        ul{list-style:none;}
-        .coms{overflow:hidden;}
-        .com-item{display:inline-block;width:150px;}
+        .con{
+            text-align: center;
+            margin-top: 150px;
+            font-size: 30px;
+            color: lightseagreen;
+        }
     </style>
 </head>
 <body>
-    <h2>downloading...</h2>
+    <div class="con">
+        正在下载和打包文件，请耐心等待 <br/>
+        这将需要几分钟的时间......
+    </div>
+    <script>
+        window.location = '/tinper/build?coms=' + queryString('coms');
+
+        function queryString(key){
+            var src = location.search || location.hash,
+                reg = new RegExp('[?&]' + key + '=([^?&=]*)(?=&|$)'),
+                match = reg.exec(src);
+            return match == null ? null : decodeURIComponent(match[1]);
+        }
+    </script>
 </body>
 </html>

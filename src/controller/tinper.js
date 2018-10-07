@@ -23,6 +23,9 @@ module.exports = {
         await ctx.render('custom',{coms:coms});
     },
     async download(ctx){
+        await ctx.render('download');
+    },
+    async build(ctx){
         const coms = ctx.query.coms || '';
         const aComs = coms.split(',');
         //生成index.js
@@ -58,10 +61,6 @@ module.exports = {
         }
         console.log('build success');
 
-        // const filePath = '/build/tinper-bee.min.js';
-        // ctx.attachment(filePath);
-        // await send(ctx,filePath);
-
         const zipName = 'tinper.zip';
         const zipStream = fs.createWriteStream(zipName);
         const zip = archiver('zip');
@@ -82,8 +81,6 @@ module.exports = {
         await zip.finalize();
         ctx.attachment(zipName);
         await send(ctx, zipName);
-
-        // await ctx.render('download');
     }
 }
 
