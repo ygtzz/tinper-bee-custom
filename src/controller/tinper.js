@@ -10,24 +10,11 @@ const git = require('isomorphic-git');
 git.plugins.set('fs',fs);
 
 
-module.exports = {
-    async custom(ctx){
-        const coms = [
-            'Button','Badge','Alert','Label','FormControl','FormGroup','Form','InputGroup','InputNumber',
-            'Checkbox','Pagination','ProgressBar','Radio','Switch','Tooltip','Dropdown','Panel','PanelGroup',
-            'Transition','Navbar','Animate','Select','Tile','Icon','Menu','Upload','Breadcrumb','Message',
-            'Notification','Popconfirm','Tabs','Cascader','Loading','Table','Tree','Clipboard','Rate','Step',
-            'Timeline','Transfer','BackTop','Collapse','Slider','Autocomplete','LoadingState','Locale','Popover'
-        ];
+const tinperService = {
+    async downloadTinper(){
 
-        await ctx.render('custom',{coms:coms});
     },
-    async download(ctx){
-        await ctx.render('download');
-    },
-    async build(ctx){
-        const coms = ctx.query.coms || '';
-        const aComs = coms.split(',');
+    async writeTinperIndex(base,aComs){
         //生成index.js
         //生成require字符串
         var requires = [],
@@ -48,11 +35,11 @@ module.exports = {
         
         module.exports = TinperBee;`
 
-        let base = 'downloads/1.5.2/tinper-bee-release';
-
+        console.log(shell.pwd());
         await fs.writeFileSync(base + '/index.js',tpl);
-
-        shell.cd('downloads/1.5.2/tinper-bee-release');
+    },
+    async buildTinper(base){
+        shell.cd(base);
         // shell.ls('*.js').forEach(function(file){
         //     console.log(file);
         // });
@@ -60,17 +47,19 @@ module.exports = {
             shell.echo('Error: tinperbee build error');
         }
         console.log('build success');
-
+        shell.cd('../../../');
+    },
+    async buildZip(base){
         const zipName = 'tinper.zip';
         const zipStream = fs.createWriteStream(zipName);
         const zip = archiver('zip');
         zip.pipe(zipStream);
-        base = path.join(__dirname,'../../') + base;
+        const zipBase = path.join(__dirname,'../../') + base;
         // 打包文件方式
         const list = [
-            {path: base + '/build/tinper-bee.js',name: 'tinper-bee.js'},
-            {path: base + '/build/tinper-bee.min.js',name:'tinper-bee-min.js'},
-            {path: base + '/assets/tinper-bee.css',name:'tinper-bee.css'}
+            {path: zipBase + '/build/tinper-bee.js',name: 'tinper-bee.js'},
+            {path: zipBase + '/build/tinper-bee.min.js',name:'tinper-bee-min.js'},
+            {path: zipBase + '/assets/tinper-bee.css',name:'tinper-bee.css'}
         ];
         for (let i = 0; i < list.length; i++) {
             zip.append(fs.createReadStream(list[i].path), { name: list[i].name })
@@ -79,6 +68,35 @@ module.exports = {
         // zip.directory('build/');
         // zip.directory('assets/');
         await zip.finalize();
+
+        return zipName;
+    }
+}
+
+module.exports = {
+    async custom(ctx){
+        const coms = [
+            'Button','Badge','Alert','Label','FormControl','FormGroup','Form','InputGroup','InputNumber',
+            'Checkbox','Pagination','ProgressBar','Radio','Switch','Tooltip','Dropdown','Panel','PanelGroup',
+            'Transition','Navbar','Animate','Select','Tile','Icon','Menu','Upload','Breadcrumb','Message',
+            'Notification','Popconfirm','Tabs','Cascader','Loading','Table','Tree','Clipboard','Rate','Step',
+            'Timeline','Transfer','BackTop','Collapse','Slider','Autocomplete','LoadingState','Locale','Popover'
+        ];
+
+        await ctx.render('custom',{coms:coms});
+    },
+    async download(ctx){
+        await ctx.render('download');
+    },
+    async build(ctx){
+        const coms = ctx.query.coms || '';
+        const aComs = coms.split(',');
+        let base = 'downloads/1.5.2/tinper-bee-release';
+       
+        await tinperService.writeTinperIndex(base,aComs);
+        await tinperService.buildTinper(base);
+        const zipName = await tinperService.buildZip(base);
+        
         ctx.attachment(zipName);
         await send(ctx, zipName);
     }
